@@ -1,5 +1,5 @@
 import csv
-fileName = r"\20k_abstracts\train.txt"#txt file containing the 
+fileName = r"FILEPATH\200k_abstracts\train.txt"#txt file containing the 
 with open(fileName, "r") as file:
     x = {}
     curr = "###24293578"#first PMID
@@ -33,12 +33,12 @@ with open(fileName, "r") as file:
                 x[line.split()[0] + " "] = ""#set new dict for curr
                 curr = line.split()[0] + " "
 
-    with open("output.csv", "w", newline='', encoding="utf-8") as csvfile:
+    with open("dataset.csv", "w", newline='', encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["Objective/Background", "Methods", "PMID"])
+        #writer.writerow(["Objective/Background", "Methods", "PMID"])
 
         for key, value in x.items():
             pMID = key.strip().split()[0] #first word in key
             pMID = pMID.replace("###","") 
             key = key.replace("###" + pMID + " ", "") #remove pMID from key
-            writer.writerow([key, value, pMID])
+            writer.writerow([key, value])
