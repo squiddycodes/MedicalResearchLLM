@@ -1,6 +1,6 @@
 import csv
 import random
-fileName = r"C:\Users\dguid\Desktop\200k_abstracts\train.txt"#txt file containing the 
+fileName = r"FILEPATH\200k_abstracts\train.txt"#txt file containing the 
 with open(fileName, "r") as file:
     x = {}
     curr = "###24293578"#first PMID
@@ -38,10 +38,12 @@ with open(fileName, "r") as file:
     random.shuffle(dataset) #for randomness
     with open("train.csv", "w", newline="", encoding="utf-8") as trainFile, \
          open("test.csv", "w", newline="", encoding="utf-8") as testFile, \
-         open("validation.csv", "w", newline="", encoding="utf-8") as validFile:
+         open("validation.csv", "w", newline="", encoding="utf-8") as validFile, \
+         open("humanFeedback.csv", "w", newline="", encoding="utf-8") as humanFeedbackFile:
         trainWriter  = csv.writer(trainFile)
         testWriter = csv.writer(testFile)
         validWriter = csv.writer(validFile)
+        humanFeedbackWriter = csv.writer(humanFeedbackFile)
 
         for i, (key, value) in enumerate(dataset):
             pMID = key.strip().split()[0] #first word in key
@@ -52,7 +54,9 @@ with open(fileName, "r") as file:
                 trainWriter.writerow([key, value])
             elif i < 550:#50 valid
                 validWriter.writerow([key, value])
-            elif i < 560:#10 test
+            elif i < 600:#50 test
                 testWriter.writerow([key, value])
+            elif i < 610:
+                humanFeedbackWriter.writerow([key, value])
             else:
                 break
