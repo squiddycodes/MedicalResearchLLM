@@ -37,18 +37,22 @@ with open(fileName, "r") as file:
     dataset = list(x.items())
     random.shuffle(dataset) #for randomness
     with open("train.csv", "w", newline="", encoding="utf-8") as trainFile, \
-     open("test.csv", "w", newline="", encoding="utf-8") as testFile:
+         open("test.csv", "w", newline="", encoding="utf-8") as testFile, \
+         open("validation.csv", "w", newline="", encoding="utf-8") as validFile:
         trainWriter  = csv.writer(trainFile)
         testWriter = csv.writer(testFile)
+        validWriter = csv.writer(validFile)
 
         for i, (key, value) in enumerate(dataset):
             pMID = key.strip().split()[0] #first word in key
             pMID = pMID.replace("###","")
             key = key.replace("###" + pMID + " ", "") #remove pMID from key
 
-            if i < 500:
+            if i < 500:#500 train
                 trainWriter.writerow([key, value])
-            elif i < 510:
+            elif i < 550:#50 valid
+                validWriter.writerow([key, value])
+            elif i < 560:#10 test
                 testWriter.writerow([key, value])
             else:
                 break
