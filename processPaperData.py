@@ -1,6 +1,6 @@
 import csv
 import random
-fileName = r"PATH\200k_abstracts\train.txt"#txt file containing the 
+fileName = r"FILEPATH\dataset.txt"#txt file from git HERE -----------------------------------
 with open(fileName, "r") as file:
     x = {}
     curr = "###24293578"#first PMID
@@ -45,18 +45,23 @@ with open(fileName, "r") as file:
         validWriter = csv.writer(validFile)
         humanFeedbackWriter = csv.writer(humanFeedbackFile)
 
+        trainSize = 3200
+        skipped = 0
         for i, (key, value) in enumerate(dataset):
             pMID = key.strip().split()[0] #first word in key
             pMID = pMID.replace("###","")
             key = key.replace("###" + pMID + " ", "") #remove pMID from key
-
-            if i < 3200:#3200 train
-                trainWriter.writerow([key, value])
-            elif i < 3600:#400 valid
-                validWriter.writerow([key, value])
-            elif i < 4000:#400 test
-                testWriter.writerow([key, value])
-            elif i < 4010:#10 human
-                humanFeedbackWriter.writerow([key, value])
-            else:
-                break
+            if value != "":
+                if i < trainSize + skipped:
+                    trainWriter.writerow([key, value])
+                elif i < trainSize + trainSize/8 + skipped:# + 1/8 valid
+                    validWriter.writerow([key, value])
+                elif i < trainSize + trainSize/4 + skipped:# + 1/8 test
+                    testWriter.writerow([key, value])
+                elif i < trainSize + trainSize/4 + 10 + skipped:# + 10 human
+                    humanFeedbackWriter.writerow([key, value])
+                else:
+                    print("total papers written:",i - skipped)
+                    break
+            else:#if no methods specified
+                skipped += 1
