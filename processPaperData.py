@@ -1,6 +1,6 @@
 import csv
 import random
-fileName = r"FILEPATH\200k_abstracts\train.txt"#txt file containing the 
+fileName = r"PATH\200k_abstracts\train.txt"#txt file containing the 
 with open(fileName, "r") as file:
     x = {}
     curr = "###24293578"#first PMID
@@ -50,13 +50,13 @@ with open(fileName, "r") as file:
             pMID = pMID.replace("###","")
             key = key.replace("###" + pMID + " ", "") #remove pMID from key
 
-            if i < 500:#500 train
+            if i < 3200:#3200 train
                 trainWriter.writerow([key, value])
-            elif i < 550:#50 valid
+            elif i < 3600:#400 valid
                 validWriter.writerow([key, value])
-            elif i < 600:#50 test
+            elif i < 4000:#400 test
                 testWriter.writerow([key, value])
-            elif i < 610:
+            elif i < 4010:#10 human
                 humanFeedbackWriter.writerow([key, value])
             else:
                 break
